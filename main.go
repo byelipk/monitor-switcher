@@ -157,4 +157,7 @@ func main() {
 
 	// Make two single clicks on the primary display
 	exec.Command("cliclick", singleClick, singleClick).Run()
+
+    // TODO: Figure out the active monitor
+    // TODO: Be able to toggle between monitors
 }
