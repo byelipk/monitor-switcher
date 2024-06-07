@@ -8,12 +8,12 @@ import (
 )
 
 type Display struct {
-	ID     string
-	Width  int
-	Height int
-	PosX   int
-	PosY   int
-    IsBuiltin bool
+	ID        string
+	Width     int
+	Height    int
+	PosX      int
+	PosY      int
+	IsBuiltin bool
 }
 
 func analyzeBytes(bytes []byte) {
@@ -50,7 +50,16 @@ func parseDisplayPosition(display *Display, line string) {
 }
 
 func main() {
-	switcherCmd := exec.Command("./c/switcher")
+	// Check if executable exists
+	_, err := exec.LookPath("./c/switcher_c")
+
+	if err != nil {
+		fmt.Println("Error: switcher_c executable not found.")
+		fmt.Println("Please compile the C program first by running make in the c directory.")
+		return
+	}
+
+	switcherCmd := exec.Command("./c/switcher_c")
 	switcherBytes, err := switcherCmd.Output()
 
 	if err != nil {
@@ -72,10 +81,10 @@ func main() {
 		return
 	}
 
-    if (numDisplays == 0) {
-        fmt.Println("No displays found")
-        return
-    }
+	if numDisplays == 0 {
+		fmt.Println("No displays found")
+		return
+	}
 
 	fmt.Println("Displays found:", numDisplays)
 
@@ -87,12 +96,12 @@ func main() {
 
 		// Initialize a new display
 		display := Display{
-			ID:     "",
-			Width:  0,
-			Height: 0,
-			PosX:   0,
-			PosY:   0,
-            IsBuiltin: false,
+			ID:        "",
+			Width:     0,
+			Height:    0,
+			PosX:      0,
+			PosY:      0,
+			IsBuiltin: false,
 		}
 
 		lines := strings.Split(chunk, "\n")
@@ -108,13 +117,13 @@ func main() {
 		}
 
 		if display.ID != "" {
-            if display.PosX == 0 && display.PosY == 0 {
-                display.IsBuiltin = true
-            }
+			if display.PosX == 0 && display.PosY == 0 {
+				display.IsBuiltin = true
+			}
 			displays = append(displays, display)
 		}
 
 	}
 
-    fmt.Println(displays)
+	fmt.Println(displays)
 }

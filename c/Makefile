@@ -5,7 +5,7 @@ CC = clang
 CFLAGS = -Wall -Wextra -Werror -g -fstandalone-debug -O0
 
 # Define the target executable
-TARGET = switcher
+TARGET = switcher_c
 
 # Define the source files
 SRCS = switcher.c display_info.c
