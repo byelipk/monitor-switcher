@@ -13,6 +13,8 @@ type Display struct {
 	Height    int
 	PosX      int
 	PosY      int
+	MidX      int
+	MidY      int
 	IsBuiltin bool
 }
 
@@ -47,6 +49,11 @@ func parseDisplayPosition(display *Display, line string) {
 		fmt.Println("Error parsing display position:", err)
 		panic(err)
 	}
+}
+
+func assignMidpoint(display *Display) {
+	display.MidX = display.PosX + display.Width/2
+	display.MidY = display.PosY + display.Height/2
 }
 
 func main() {
@@ -120,10 +127,34 @@ func main() {
 			if display.PosX == 0 && display.PosY == 0 {
 				display.IsBuiltin = true
 			}
+
+			// Assign midpoint
+			display.MidX = display.PosX + display.Width/2
+			display.MidY = display.PosY + display.Height/2
+
 			displays = append(displays, display)
 		}
 
 	}
 
 	fmt.Println(displays)
+
+	// Find the primary display
+	var primaryDisplay *Display
+
+	for _, display := range displays {
+		if display.IsBuiltin {
+			primaryDisplay = &display
+			break
+		}
+	}
+
+	if primaryDisplay == nil {
+		panic("Error: Primary display not found.")
+	}
+
+	singleClick := fmt.Sprintf("c:%d,%d", primaryDisplay.MidX, primaryDisplay.MidY)
+
+	// Make two single clicks on the primary display
+	exec.Command("cliclick", singleClick, singleClick).Run()
 }
